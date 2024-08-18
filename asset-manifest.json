@@ -1,13 +1,13 @@
 {
   "files": {
-    "main.css": "/FB-GLOBAL-TV/static/css/main.7616032a.css",
-    "main.js": "/FB-GLOBAL-TV/static/js/main.621e6a9b.js",
+    "main.css": "/FB-GLOBAL-TV/static/css/main.a7470b6c.css",
+    "main.js": "/FB-GLOBAL-TV/static/js/main.9dbd7cf1.js",
     "index.html": "/FB-GLOBAL-TV/index.html",
-    "main.7616032a.css.map": "/FB-GLOBAL-TV/static/css/main.7616032a.css.map",
-    "main.621e6a9b.js.map": "/FB-GLOBAL-TV/static/js/main.621e6a9b.js.map"
+    "main.a7470b6c.css.map": "/FB-GLOBAL-TV/static/css/main.a7470b6c.css.map",
+    "main.9dbd7cf1.js.map": "/FB-GLOBAL-TV/static/js/main.9dbd7cf1.js.map"
   },
   "entrypoints": [
-    "static/css/main.7616032a.css",
-    "static/js/main.621e6a9b.js"
+    "static/css/main.a7470b6c.css",
+    "static/js/main.9dbd7cf1.js"
   ]
 }
