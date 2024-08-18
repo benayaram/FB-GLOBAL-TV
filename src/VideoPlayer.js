@@ -9,8 +9,8 @@ const VideoPlayer = () => {
   const videoRef = useRef(null);
 
   useEffect(() => {
-    fetch('/schedules.json')
-      .then(response => response.json())
+    fetch(`${process.env.PUBLIC_URL}/schedules.json`)
+    .then(response => response.json())
       .then(data => {
         const now = new Date();
         const activeSchedule = data.find(schedule => {

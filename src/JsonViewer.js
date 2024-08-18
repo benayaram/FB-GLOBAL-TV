@@ -5,8 +5,8 @@ const JsonViewer = () => {
   const [schedules, setSchedules] = useState([]);
 
   useEffect(() => {
-    fetch('/schedules.json')
-      .then(response => response.json())
+    fetch(`${process.env.PUBLIC_URL}/schedules.json`)
+    .then(response => response.json())
       .then(data => setSchedules(data))
       .catch(error => console.error('Error fetching schedules:', error));
   }, []);
