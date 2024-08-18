@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/FBGLOBAL-TV-SCHEDULE/static/css/main.7616032a.css",
+    "main.js": "/FBGLOBAL-TV-SCHEDULE/static/js/main.f1d99210.js",
+    "index.html": "/FBGLOBAL-TV-SCHEDULE/index.html",
+    "main.7616032a.css.map": "/FBGLOBAL-TV-SCHEDULE/static/css/main.7616032a.css.map",
+    "main.f1d99210.js.map": "/FBGLOBAL-TV-SCHEDULE/static/js/main.f1d99210.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.7616032a.css",
+    "static/js/main.f1d99210.js"
+  ]
+}
