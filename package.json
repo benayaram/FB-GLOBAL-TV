@@ -21,7 +21,7 @@
     "deploy": "gh-pages -d build",
     "eject": "react-scripts eject"
   },
-  "homepage": "https://rajujosiah.github.io/FBGLOBAL-TV-SCHEDULE",
+  "homepage": "https://benayaram.github.io/FB-GLOBAL-TV",
   "eslintConfig": {
     "extends": [
       "react-app",
