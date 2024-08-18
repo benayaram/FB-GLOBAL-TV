@@ -1,0 +1,59 @@
+/* JsonViewer.css */
+
+/* Container for the JSON Viewer */
+.json-viewer-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Header styling */
+  .json-viewer-header {
+    text-align: center;
+    color: #333;
+    margin-bottom: 20px;
+  }
+  
+  /* Message for no schedules available */
+  .no-schedules-message {
+    text-align: center;
+    color: #777;
+  }
+  
+  /* Styling for each schedule card */
+  .schedule-card {
+    display: flex;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 20px;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .schedule-thumbnail {
+    width: 150px;
+    height: 100px;
+    object-fit: cover;
+  }
+  
+  .schedule-details {
+    padding: 10px;
+    flex: 1;
+  }
+  
+  .schedule-title {
+    margin: 0;
+    font-size: 18px;
+    color: #333;
+  }
+  
+  .schedule-speaker,
+  .schedule-start,
+  .schedule-end {
+    margin: 5px 0;
+    color: #555;
+  }
