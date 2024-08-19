@@ -1,18 +1,10 @@
 [
-    {
-      "title": "Jesus",
-      "speakerName": "Me",
-      "videoUrl": "https://www.youtube.com/watch?v=OVZCVgPuXc8",
-      "startTime": "2024-08-18T23:16",
-      "endTime": "2024-08-23T23:30",
-      "thumbnailUrl": "https://img.youtube.com/vi/OVZCVgPuXc8/0.jpg"
-    },
-    {
-      "title": "Jesus",
-      "speakerName": "Me",
-      "videoUrl": "https://www.youtube.com/watch?v=OVZCVgPuXc8",
-      "startTime": "2024-08-18T20:21",
-      "endTime": "2024-08-18T19:21",
-      "thumbnailUrl": "https://img.youtube.com/vi/OVZCVgPuXc8/0.jpg"
-    }
-  ]
+  {
+    "title": "Sunday Service",
+    "speakerName": "Rev Raju Josiah",
+    "videoUrl": "https://www.youtube.com/watch?v=OVZCVgPuXc8&t=3s&pp=ygULcmFqdSBqb3NpYWg%3D",
+    "startTime": "2024-08-20T00:00",
+    "endTime": "2024-08-20T00:45",
+    "thumbnailUrl": "https://img.youtube.com/vi/OVZCVgPuXc8/0.jpg"
+  }
+]
