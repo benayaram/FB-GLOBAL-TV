@@ -11,31 +11,69 @@ const VideoPlayer = () => {
   // Function to update the current and next schedule
   const updateSchedule = async () => {
     try {
-      const response = await fetch(`${process.env.PUBLIC_URL}/schedules.json`);
+      // Fetch JSON data from the URL
+      const response = await fetch('https://raw.githubusercontent.com/rajujosiah/FBGL-MINISTRIES-APP-DATA/refs/heads/main/FBGlobal%20TV%20Schedule');
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
       const data = await response.json();
-      const now = new Date();
+      const now = new Date(); // Current date and time
+
+      // Filter schedules for the current date
+      const todaySchedules = data.filter(schedule => schedule.date === now.toISOString().split('T')[0]);
 
       // Find the active schedule
-      const activeSchedule = data.find(schedule => {
-        const startTime = new Date(schedule.startTime);
-        const endTime = new Date(schedule.endTime);
+      const activeSchedule = todaySchedules.find(schedule => {
+        const [startTime, endTime] = schedule.time_slot.split(' - ').map(time => {
+          const [hours, minutes] = time.split(':');
+          const slotDate = new Date(schedule.date);
+          slotDate.setHours(parseInt(hours), parseInt(minutes), 0, 0);
+          return slotDate;
+        });
+
         return now >= startTime && now <= endTime;
       });
 
       // Find the next schedule
-      const upcomingSchedule = data.find(schedule => {
-        const startTime = new Date(schedule.startTime);
-        return now < startTime;
-      });
+      const upcomingSchedule = todaySchedules
+        .filter(schedule => {
+          const [startTime] = schedule.time_slot.split(' - ').map(time => {
+            const [hours, minutes] = time.split(':');
+            const slotDate = new Date(schedule.date);
+            slotDate.setHours(parseInt(hours), parseInt(minutes), 0, 0);
+            return slotDate;
+          });
 
+          return now < startTime;
+        })
+        .sort((a, b) => {
+          const [aStartTime] = a.time_slot.split(' - ').map(time => {
+            const [hours, minutes] = time.split(':');
+            const slotDate = new Date(a.date);
+            slotDate.setHours(parseInt(hours), parseInt(minutes), 0, 0);
+            return slotDate;
+          });
+
+          const [bStartTime] = b.time_slot.split(' - ').map(time => {
+            const [hours, minutes] = time.split(':');
+            const slotDate = new Date(b.date);
+            slotDate.setHours(parseInt(hours), parseInt(minutes), 0, 0);
+            return slotDate;
+          });
+
+          return aStartTime - bStartTime;
+        })[0]; // Get the closest upcoming schedule
+
+      // Update the state with the active and next schedules
       setCurrentSchedule(activeSchedule || null);
       setNextSchedule(upcomingSchedule || null);
 
+      // Update the "no video" message
       if (!activeSchedule) {
         if (upcomingSchedule) {
           setNoVideoMessage("No video is scheduled at this time.");
         } else {
-          setNoVideoMessage("No further videos are scheduled.");
+          setNoVideoMessage("No further videos are scheduled for today.");
         }
       } else {
         setNoVideoMessage(null);
@@ -56,44 +94,29 @@ const VideoPlayer = () => {
     if (videoRef.current && currentSchedule) {
       const handleTimeUpdate = () => {
         const now = new Date().getTime();
-        const startTime = new Date(currentSchedule.startTime).getTime();
-        const endTime = new Date(currentSchedule.endTime).getTime();
-        const adjustedTime = Math.max(0, (now - startTime) / 1000);
+        const [startTime] = currentSchedule.time_slot.split(' - ').map(time => {
+          const [hours, minutes] = time.split(':');
+          const slotDate = new Date(currentSchedule.date);
+          slotDate.setHours(parseInt(hours), parseInt(minutes), 0, 0);
+          return slotDate.getTime();
+        });
         const videoDuration = videoRef.current.duration || 0;
+        const elapsedTime = (now - startTime) / 1000;
 
-        if (adjustedTime > videoDuration) {
-          setVideoCompletedMessage("This video is completed before the scheduled end time.");
+        if (elapsedTime > videoDuration) {
+          setVideoCompletedMessage("This video has ended.");
         } else {
           setVideoCompletedMessage(null);
         }
       };
 
       const handleEnded = () => {
-        const now = new Date();
-        const endTime = new Date(currentSchedule.endTime);
-
-        if (now >= endTime && nextSchedule) {
-          const nextStartTime = new Date(nextSchedule.startTime).getTime();
-          const timeUntilNextStart = nextStartTime - now.getTime();
-
-          if (timeUntilNextStart > 0) {
-            setNoVideoMessage("No video is scheduled at this time.");
-            setCurrentSchedule(null);
-
-            // Set a timeout to start the next video when the time arrives
-            setTimeout(() => {
-              setNoVideoMessage(null);
-              setCurrentSchedule(nextSchedule);
-              setNextSchedule(null);
-            }, timeUntilNextStart);
-          } else {
-            // Start the next video immediately if its time has already passed
-            setNoVideoMessage(null);
-            setCurrentSchedule(nextSchedule);
-            setNextSchedule(null);
-          }
+        if (nextSchedule) {
+          setCurrentSchedule(nextSchedule);
+          setNextSchedule(null);
+          setNoVideoMessage(null);
         } else {
-          setNoVideoMessage("No video is scheduled at this time.");
+          setNoVideoMessage("No further videos are scheduled.");
           setCurrentSchedule(null);
         }
       };
@@ -102,7 +125,6 @@ const VideoPlayer = () => {
       videoRef.current.addEventListener('timeupdate', handleTimeUpdate);
       videoRef.current.addEventListener('ended', handleEnded);
 
-      // Cleanup: Remove event listeners if the videoRef is available
       return () => {
         if (videoRef.current) {
           videoRef.current.removeEventListener('timeupdate', handleTimeUpdate);
@@ -112,12 +134,8 @@ const VideoPlayer = () => {
     }
   }, [videoRef.current, currentSchedule, nextSchedule]);
 
-  const formatTime = (date) => {
-    const hours = date.getHours();
-    const minutes = date.getMinutes();
-    const period = hours >= 12 ? 'PM' : 'AM';
-    const formattedHours = ((hours + 11) % 12 + 1);
-    return `${formattedHours}:${minutes < 10 ? '0' : ''}${minutes} ${period}`;
+  const formatTime = (timeSlot) => {
+    return timeSlot;
   };
 
   return (
@@ -128,11 +146,11 @@ const VideoPlayer = () => {
         </div>
       ) : (
         <div className="video-wrapper">
-          {currentSchedule || videoCompletedMessage ? (
+          {currentSchedule ? (
             <>
               <iframe
                 ref={videoRef}
-                src={`https://www.youtube.com/embed/${new URL(currentSchedule?.videoUrl || nextSchedule?.videoUrl).searchParams.get('v')}?autoplay=1&start=${Math.floor((new Date().getTime() - new Date(currentSchedule?.startTime || nextSchedule?.startTime).getTime()) / 1000)}&playsinline=1`}
+                src={`https://www.youtube.com/embed/${new URL(currentSchedule.video_link).searchParams.get('v')}?autoplay=1`}
                 title="YouTube video player"
                 frameBorder="0"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
